@@ -9,6 +9,12 @@ namespace LightJam
     {
         Interactable current;
         bool waitForInteractRelease;
+        Collider2D bodyCollider;
+
+        void Awake()
+        {
+            bodyCollider = GetComponent<Collider2D>();
+        }
 
         void Update()
         {
@@ -27,7 +33,7 @@ namespace LightJam
                 waitForInteractRelease = false;
             }
 
-            current = Interactable.FindNearest(transform.position);
+            current = Interactable.FindNearest(transform.position, bodyCollider);
             if (current == null)
             {
                 DialogueUI.Ensure().ShowPrompt(false, string.Empty);

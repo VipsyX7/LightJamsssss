@@ -63,7 +63,7 @@ namespace LightJam
             Active.Remove(this);
         }
 
-        public static Interactable FindNearest(Vector2 position, float extraRange = 0f)
+        public static Interactable FindNearest(Vector2 position, Collider2D fromCollider = null, float extraRange = 0f)
         {
             Interactable best = null;
             float bestDist = float.MaxValue;
@@ -74,7 +74,7 @@ namespace LightJam
                 if (item == null || !item.CanInteract)
                     continue;
 
-                float dist = Vector2.Distance(position, item.transform.position);
+                float dist = DistanceTo(item, position, fromCollider);
                 if (dist <= item.radius + extraRange && dist < bestDist)
                 {
                     best = item;
@@ -83,6 +83,21 @@ namespace LightJam
             }
 
             return best;
+        }
+
+        static float DistanceTo(Interactable item, Vector2 position, Collider2D fromCollider)
+        {
+            var target = item.GetComponent<Collider2D>();
+            if (fromCollider != null && target != null && fromCollider.enabled && target.enabled)
+            {
+                ColliderDistance2D result = Physics2D.Distance(fromCollider, target);
+                return Mathf.Max(0f, result.distance);
+            }
+
+            if (target != null && target.enabled)
+                return Vector2.Distance(position, target.ClosestPoint(position));
+
+            return Vector2.Distance(position, item.transform.position);
         }
 
         public void Interact()
@@ -134,6 +149,9 @@ namespace LightJam
                 PlayerInventory.Instance.Remove(requireItemId);
 
             used = true;
+            var slot = GetComponent<VisualSlot>();
+            if (slot != null)
+                slot.ApplyUsed();
             onInteractSuccess?.Invoke();
 
             if (hideAfterSuccess)

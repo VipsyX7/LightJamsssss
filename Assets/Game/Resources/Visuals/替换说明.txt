@@ -1,0 +1,17 @@
+﻿把同名 PNG 直接覆盖本文件夹即可换图，不必改代码。
+
+backdrop.png     房间背景
+floor.png        地面装饰层（可选）
+ground.png       角色站立的地面
+wall.png         左右挡墙
+player.png       玩家角色
+window.png       窗户
+painting.png     挂画
+note.png         纸条
+lamp.png         台灯（有钥匙）
+lamp_used.png    台灯（钥匙拿走后，可选）
+door_closed.png  关闭的门
+door_open.png    打开的门
+
+导入设置会自动变成 Sprite。也可以在 Project 里右键创建 LightJam/画面素材，把图拖到槽位。
+菜单：LightJam → 打开素材文件夹
